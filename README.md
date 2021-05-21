@@ -18,4 +18,4 @@ Yes because it's an individual component that can be tested.
 In Puppeteer, we won't be able to see it drive the browser if headless is set to true.
 
 5. What would your beforeAll callback look like if you wanted to start from the settings page before every test case?
-
+await page.click('img[alt="settings"]');
