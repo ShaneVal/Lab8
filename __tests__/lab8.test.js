@@ -29,17 +29,23 @@ describe('Basic user flow for SPA ', () => {
 */
   it('Test3: Clicking first <journal-entry>, new URL should contain /#entry1', async () => {
     // implement test3: Clicking on the first journal entry should update the URL to contain “/#entry1”
+    /*
     const entries = await page.$$('journal-entry');
     await entries[0].click();
     await page.waitForNavigation();
     let link = page.url();
     expect(link.indexOf("/#entry1") > -1).toBe(true);
+    */
+   await page.click("journal-entry");
+   expect(page.url()).toMatch("/#entry1");
   });
 
   it('Test4: On first Entry page - checking page header title', async () => {
     // implement test4: Clicking on the first journal entry should update the header text to “Entry 1” 
-    const header = await page.$$('h1')[0];
-    expect(header == 'Entry 1').toBe(true);
+    
+    // This method runs document.querySelector within the page and passes it as the first argument to pageFunction
+    const header = await page.$eval('h1', (title) => title.textContent);
+    expect(header == "Entry 1").toBe(true);
   });
 
   it('Test5: On first Entry page - checking <entry-page> contents', async () => {
@@ -55,6 +61,18 @@ describe('Basic user flow for SPA ', () => {
         alt: 'bee with sunglasses'
       }
     */
+      const title = await page.$eval('entry-page', (title) => title.entry.title);
+      expect(title == 'You like jazz?').toBe(true);
+
+      const date = await page.$eval('entry-page', (date) => date.entry.date);
+      expect(date == '4/25/2021').toBe(true);
+
+      const content = await page.$eval('entry-page', (content) => content.entry.content);
+      expect(content == "According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible.").toBe(true);
+
+      const img = await page.$eval('entry-page', (img) => img.entry.image);
+      expect(img.src).toMatch('https://i1.wp.com/www.thepopcornmuncher.com/wp-content/uploads/2016/11/bee-movie.jpg?resize=800%2C455');
+      expect(img.alt == 'bee with sunglasses').toBe(true);
   }, 10000);
 
   it('Test6: On first Entry page - checking <body> element classes', async () => {
