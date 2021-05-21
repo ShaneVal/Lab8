@@ -11,7 +11,7 @@ describe('Basic user flow for SPA ', () => {
     });
     expect(numEntries).toBe(10);
   });
-/*
+
   // test 2 is given
   it('Test2: Make sure <journal-entry> elements are populated', async () => {
     let allArePopulated = true;
@@ -26,7 +26,7 @@ describe('Basic user flow for SPA ', () => {
     }
     expect(allArePopulated).toBe(true);
   }, 30000);
-*/
+
   it('Test3: Clicking first <journal-entry>, new URL should contain /#entry1', async () => {
     // implement test3: Clicking on the first journal entry should update the URL to contain “/#entry1”
     /*
@@ -77,27 +77,32 @@ describe('Basic user flow for SPA ', () => {
 
   it('Test6: On first Entry page - checking <body> element classes', async () => {
     // implement test6: Clicking on the first journal entry should update the class attribute of <body> to ‘single-entry’
-
+    const click = await page.$eval('body', (click) => click.className);
+    expect(click == 'single-entry').toBe(true);
   });
 
   it('Test7: Clicking the settings icon, new URL should contain #settings', async () => {
     // implement test7: Clicking on the settings icon should update the URL to contain “/#settings”
-
+   await page.click('img[alt="settings"]');
+   expect(page.url()).toMatch('/#settings');
   });
 
   it('Test8: On Settings page - checking page header title', async () => {
     // implement test8: Clicking on the settings icon should update the header to be “Settings”
-
+    const header = await page.$eval('h1', (title) => title.textContent);
+    expect(header == "Settings").toBe(true);
   });
 
   it('Test9: On Settings page - checking <body> element classes', async () => {
     // implement test9: Clicking on the settings icon should update the class attribute of <body> to ‘settings’
-
+    const click = await page.$eval('body', (click) => click.className);
+    expect(click == 'settings').toBe(true);
   });
 
   it('Test10: Clicking the back button, new URL should be /#entry1', async() => {
     // implement test10: Clicking on the back button should update the URL to contain ‘/#entry1’
-
+    await page.goBack();
+    expect(page.url()).toMatch('/#entry1');
   });
 
   // define and implement test11: Clicking the back button once should bring the user back to the home page
