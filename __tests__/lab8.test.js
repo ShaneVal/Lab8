@@ -11,7 +11,6 @@ describe('Basic user flow for SPA ', () => {
     });
     expect(numEntries).toBe(10);
   });
-/*
   // test 2 is given
   it('Test2: Make sure <journal-entry> elements are populated', async () => {
     let allArePopulated = true;
@@ -26,16 +25,8 @@ describe('Basic user flow for SPA ', () => {
     }
     expect(allArePopulated).toBe(true);
   }, 30000);
-*/
   it('Test3: Clicking first <journal-entry>, new URL should contain /#entry1', async () => {
     // implement test3: Clicking on the first journal entry should update the URL to contain “/#entry1”
-    /*
-    const entries = await page.$$('journal-entry');
-    await entries[0].click();
-    await page.waitForNavigation();
-    let link = page.url();
-    expect(link.indexOf("/#entry1") > -1).toBe(true);
-    */
    await page.click("journal-entry");
    expect(page.url()).toMatch("/#entry1");
   });
@@ -155,12 +146,41 @@ describe('Basic user flow for SPA ', () => {
     expect(img.alt == 'forrest running').toBe(true);
   }, 10000);
 
-  // create your own test 17
+  // create your own test17: Clicking on the header should bring the user back to the homepage
+  it('Test17: Clicking the header, new URL should be http://127.0.0.1:5500/', async () => {
+    await page.click('entry-page');
+    expect(page.url()).toMatch('http://127.0.0.1:5500/');
+    await page.goBack();
+  });
 
-  // create your own test 18
+  // create your own test18: Verify the url is correct when clicking on the seventh entry
+  it('Test18: Clicking seventh <journal-entry>, new URL should contain /#entry7', async () => {
+    const entries = await page.$$('journal-entry');
+    await entries[6].click();
+    await page.waitForNavigation();
+    expect(page.url()).toMatch("/#entry7");
+  });
 
-  // create your own test 19
+  // create your own test19: Verify the entry-title is correct when clicking on the seventh entry
+  it('Test19: On seventh Entry page - checking post title', async () => {
+    const title = await page.$eval('h1', (title) =>  title.textContent);
+    expect(title == "Entry 7").toBe(true);
 
-  // create your own test 20
+  });
+  // create your own test20: Verify the entry page contents is correct when clicking on the seventh entry
+  it('Test20: On seventh Entry page - checking <entry-page> contents', async () => {
+    const title = await page.$eval('entry-page', (title) => title.entry.title);
+    expect(title == 'Just keep swimming').toBe(true);
+
+    const date = await page.$eval('entry-page', (date) => date.entry.date);
+    expect(date == '5/1/2021').toBe(true);
+
+    const content = await page.$eval('entry-page', (content) => content.entry.content);
+    expect(content == "I am a nice shark, not a mindless eating machine. If I am to change this image, I must first change myself. Fish are friends, not food.").toBe(true);
+
+    const img = await page.$eval('entry-page', (img) => img.entry.image);
+    expect(img.src).toMatch( "https://static.businessinsider.com/image/582a0c80dd08955f6d8b4650-/image.jpg");
+    expect(img.alt == 'dory and nemo scared in front of shark').toBe(true);
+  }, 10000);
   
 });
